@@ -28,7 +28,17 @@ function NotePage() {
         })
     }
 
-    const handleSubmit = async (e) => {
+    const deleteNote = async () => {
+        fetch(`/api/notes/${noteId}/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        navigate('/')
+    }
+
+    const handleSubmit = () => {
         updateNote()
         navigate('/')
     }
@@ -39,6 +49,7 @@ function NotePage() {
                 <h3>
                     <MdArrowBackIos onClick={handleSubmit} />
                 </h3>
+                <button onClick={deleteNote}>Delete</button>
             </div>
             <textarea onChange={(e) => setNote({ ...note, 'body': e.target.value })} defaultValue={note?.body}></textarea>
         </div>
