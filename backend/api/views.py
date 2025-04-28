@@ -48,7 +48,7 @@ def getRoutes(request):
 @api_view(['GET', 'POST'])
 def getNotes(request):
     if request.method == 'GET':
-        notes = Note.objects.all()
+        notes = Note.objects.all().order_by('-updated')
         serializer = NoteSerializer(notes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     

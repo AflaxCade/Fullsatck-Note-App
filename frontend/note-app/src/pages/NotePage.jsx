@@ -1,9 +1,10 @@
 import { MdArrowBackIos } from "react-icons/md";
 import React, { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, useNavigate  } from 'react-router-dom'
 
 function NotePage() {
 
+    const navigate = useNavigate()
     const { id: noteId } = useParams()
     const [note, setNote] = useState(null)
 
@@ -17,16 +18,29 @@ function NotePage() {
         setNote(data)
     }
 
+    const updateNote = async () => {
+        fetch(`/api/notes/${noteId}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(note)
+        })
+    }
+
+    const handleSubmit = async (e) => {
+        updateNote()
+        navigate('/')
+    }
+
     return (
         <div className='note'>
             <div className="note-header">
                 <h3>
-                    <Link to="/">
-                        <MdArrowBackIos />
-                    </Link>
+                    <MdArrowBackIos onClick={handleSubmit} />
                 </h3>
             </div>
-            <textarea defaultValue={note?.body}></textarea>
+            <textarea onChange={(e) => setNote({ ...note, 'body': e.target.value })} defaultValue={note?.body}></textarea>
         </div>
     )
 }
