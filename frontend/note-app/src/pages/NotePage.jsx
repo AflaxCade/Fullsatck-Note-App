@@ -13,9 +13,20 @@ function NotePage() {
     }, [noteId])
 
     const getNote = async () => {
+        if (noteId === 'new') return
         const response = await fetch(`/api/notes/${noteId}`)
         const data = await response.json()
         setNote(data)
+    }
+
+    const createNote = async () => {
+        fetch('/api/notes/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(note)
+        })
     }
 
     const updateNote = async () => {
@@ -38,8 +49,16 @@ function NotePage() {
         navigate('/')
     }
 
+    console.log(note)
+
     const handleSubmit = () => {
-        updateNote()
+        if (noteId !== 'new' && note.body === '') {
+            deleteNote()
+        } else if (noteId !== 'new') {
+            updateNote()
+        } else if (noteId === 'new' && note.body !== null) {
+            createNote()
+        }
         navigate('/')
     }
 
@@ -49,9 +68,10 @@ function NotePage() {
                 <h3>
                     <MdArrowBackIos onClick={handleSubmit} />
                 </h3>
-                <button onClick={deleteNote}>Delete</button>
+                {noteId !== 'new' ? (<button onClick={deleteNote}>Delete</button>) : (<button onClick={handleSubmit}>Save</button>)}
+                
             </div>
-            <textarea onChange={(e) => setNote({ ...note, 'body': e.target.value })} defaultValue={note?.body}></textarea>
+            <textarea onChange={(e) => setNote({ ...note, 'body': e.target.value })} value={note?.body}></textarea>
         </div>
     )
 }
