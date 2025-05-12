@@ -23,7 +23,7 @@ A simple Django REST API for managing notes. Supports creating, updating, and de
 
 ```sh
 git clone https://github.com/AflaxCade/Fullsatck-Note-App.git
-cd "Django + React Notes App\backend"
+cd backend
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
